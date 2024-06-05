@@ -604,9 +604,9 @@ void lerExcluirPacientes(int b[], int tamanhoPacientesExcluir, int &contPaciente
     for(; i<tamanhoPacientesExcluir; i++){
         cout << "\n\tPaciente a ser removido: ";
         cin >> b[i];
-        if(b[i] <= 0){
-            break;
-        }
+        if (b[i] <= 0) {
+                break;
+            }
         while (!buscaAleatoriaPacientesCpf(a, b[i], contPacientes1)){
             cout << "\tO cpf nao existe, digite outro: ";
             cin >> b[i];
@@ -614,29 +614,28 @@ void lerExcluirPacientes(int b[], int tamanhoPacientesExcluir, int &contPaciente
                 break;
             }
         }
-        contPacientesExcluir++;
+        contPacientesExcluir = i-1;
+
     }
 }
 
-void atualizacaoExcluirPacientes(struct pacientes a[], struct pacientes b[], int tamanho, int vetPacientesExcluir[], int &contPacientesExcluir, int &cont3, int &cont1){
-    int i = 0;
-    int k = 0;
-    for(int j=0; i<tamanho && j <= contPacientesExcluir + 1; i++){
-        if(a[i].cpf != vetPacientesExcluir[j]){
-            b[k] = a[i];
-            k++;
-        }else {
+void atualizacaoExcluirPacientes(struct pacientes a[], struct pacientes b[], int tamanho, int vetPacientesExcluir[], int &contPacientesExcluir, int &cont3, int &cont1) {
+    cont3 = 0;
+    for (int i = 0, j = 0, k = 0; i < tamanho && j <= contPacientesExcluir ; i++) {
+            if (a[i].cpf != vetPacientesExcluir[j]) {
+                b[k] = a[i];
+                k++;
+                cont3++;
+            }else{
             j++;
-            }
         }
+}
 
-        cont3 = k;
-
-    for(int c = 0; c <= cont3; c++){
+    for (int c = 0; c < cont3; c++) {
         a[c] = b[c];
-        }
-        cont1 = cont3;
     }
+    cont1 = cont3 - 1;
+}
 
 
 
