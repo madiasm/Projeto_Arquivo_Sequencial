@@ -189,7 +189,7 @@ void exibirMedicamento(struct medicamentos medicamento[], int tamanhoMedicamento
         }
 }
 
-bool ConsultarMedicamento(struct medicamentos medicamento[], int cod, int &contMedicamento){
+bool consultarMedicamento(struct medicamentos medicamento[], int cod, int &contMedicamento){
         int i = 0, f = contMedicamento;
         int m = (i + f) / 2;
         for (; f >= i && cod != medicamento[m].codigo; m = (i + f) / 2){
@@ -235,7 +235,7 @@ bool buscaAleatoriaConsultaQuantMedicamento(struct medicamentos medicamento[], i
 bool buscaAleatoriaConsultaMedicamento(struct medicamentos medicamento[], int cod, int &contMedicamento){
         int i = 0, f = contMedicamento;
         int m = (i + f) / 2;
-        for (; f >= i && cod != medicamento[m].codigo; m = (i + f) / 2){
+        for (; i <= f && cod != medicamento[m].codigo; m = (i + f) / 2){
             if (cod > medicamento[m].codigo)
                 i = m + 1;
             else
@@ -330,7 +330,7 @@ bool buscaAleatoriaConsultaCpf(struct pacientes a[], int cpf, int &contPacientes
             f = m - 1;
     }
     if (cpf == a[m].cpf){
-        cout << "Paciente " << a[i].nome << ": " << endl;
+        cout << "Paciente " << a[m].nome << ": " << endl;
         buscaAleatoriaPacientesCodCidade(b, a[i].codigoCidade, contCidade);
         return 1;
     }
@@ -542,7 +542,7 @@ void lerExcluirPacientes(int b[], int tamanhoPacientesExcluir, int &contPaciente
 }
 
 void atualizacaoExcluirPacientes(struct pacientes a[], struct pacientes b[], int tamanho, int vetPacientesExcluir[], int &contPacientesExcluir, int &cont3){
-    for(int i=0, j=0, k=0; i<tamanho && j<=contPacientesExcluir; i++){
+    for(int i=0, j=0, k=0; i<tamanho && j<contPacientesExcluir; i++){
         if(a[i].cpf != vetPacientesExcluir[j]){
             b[k] = a[i];
             k = k+1;
