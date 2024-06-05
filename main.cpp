@@ -57,7 +57,7 @@ struct medicamentos{
 };
 
 
-//----------------FUNÇÕES DE LEITURA--------------------
+//----------------FUNÃ‡Ã•ES DE LEITURA--------------------
 
 void lerCidade(struct cidades a[], int tamanho, int &cont){
     for(int i = 0; i < tamanho && a[i].codigo != 0; i++, cont++){
@@ -109,7 +109,7 @@ void lerMedicamentos(struct medicamentos a[], int tamanho, int &cont){
     }
 }
 
-//------------------------FUNÇÕES DE IMPRESSÃO--------------------
+//------------------------FUNÃ‡Ã•ES DE IMPRESSÃƒO--------------------
 
 void imprimirPaciente(struct pacientes vetPaciente[], int &contPaciente1){
     for(int i = 0; i < contPaciente1; i++){
@@ -169,9 +169,6 @@ void imprimirConsultas(struct consultas vetConsultas[], int &contConsultas){
     }
 }
 
-//------------------------FUNÇÕES DE BUSCA--------------------
-
-
 void exibirMedicamento(struct medicamentos medicamento[], int tamanhoMedicamento, int &contMedicamento){
         cout << "\n\tExibir medicamentos com estoque escasso" << endl;
         for(int i = 0; i < contMedicamento; i++){
@@ -187,6 +184,35 @@ void exibirMedicamento(struct medicamentos medicamento[], int tamanhoMedicamento
                 cout << "\n\tValor total: " << medicamento[i].precoUnitario * (medicamento[i].estoqueMaximo - medicamento[i].quantEstoque);
             }
         }
+}
+
+//------------------------FUNÃ‡Ã•ES DE BUSCA--------------------
+
+
+float ConsultaPrecoUnitario(struct medicamentos vetMedicamento[], int codigo, int &contMedicamento){
+    int i = 0, f = contMedicamento;
+        int m = (i + f) / 2;
+        for (; f >= i && codigo != vetMedicamento[m].codigo; m = (i + f) / 2){
+            if (codigo > vetMedicamento[m].codigo)
+                i = m + 1;
+            else
+                f = m - 1;
+        }
+        if (codigo == vetMedicamento[m].codigo){
+            return vetMedicamento[m].precoUnitario;
+        }
+        else{
+            return 0;
+        }
+}
+
+void SomaConsultas(struct consultas consulta[], int &contConsultas, struct medicamentos vetMedicamento[], int &contMedicamento){
+        float valorTotal = 0;
+        for(int i = 0; i < contConsultas; i++){
+            valorTotal += 100 + (consulta[i].quantMedicamento * ConsultaPrecoUnitario(vetMedicamento, consulta[i].codigoMedicamento, contMedicamento));
+        }
+
+        cout << "\n\tO valor total de todas as consultas e: " << valorTotal << endl;
 }
 
 bool consultarMedicamento(struct medicamentos medicamento[], int cod, int &contMedicamento){
@@ -235,14 +261,14 @@ bool buscaAleatoriaConsultaQuantMedicamento(struct medicamentos medicamento[], i
 bool buscaAleatoriaConsultaMedicamento(struct medicamentos medicamento[], int cod, int &contMedicamento){
         int i = 0, f = contMedicamento;
         int m = (i + f) / 2;
-        for (; i <= f && cod != medicamento[m].codigo; m = (i + f) / 2){
+        for (; f >= i && cod != medicamento[m].codigo; m = (i + f) / 2){
             if (cod > medicamento[m].codigo)
                 i = m + 1;
             else
                 f = m - 1;
         }
         if (cod == medicamento[m].codigo){
-            cout << "Medicamento " << cod << ": " << medicamento[m].descricao << endl;
+            cout << "\tMedicamento " << cod << ": " << medicamento[m].descricao << endl;
             return 1;
         }
         else{
@@ -274,7 +300,7 @@ bool buscaAleatoriaConsultaCid(struct cid doenca[], int cod, int &contCid){
             f = m - 1;
     }
     if (cod == doenca[m].codigo){
-        cout << "Doenca " << cod << ": " << doenca[m].descricao;
+        cout << "\tDoenca " << cod << ": " << doenca[m].descricao;
         return 1;
     }
     else{
@@ -293,7 +319,7 @@ bool buscaAleatoriaConsultaMedicosCod(struct medicos medico[], int codigoMedico,
             f = m - 1;
     }
     if (codigoMedico == medico[m].codigo){
-        cout << "Nome do medico: " << medico[m].nome << endl;
+        cout << "\tNome do medico: " << medico[m].nome << endl;
         buscaAleatoriaConsultaMedicosCodEspec(especialidades, medico[m].codigoEspecialidade, contEspecialidade);
         return 1;
     }
@@ -330,8 +356,8 @@ bool buscaAleatoriaConsultaCpf(struct pacientes a[], int cpf, int &contPacientes
             f = m - 1;
     }
     if (cpf == a[m].cpf){
-        cout << "Paciente " << a[m].nome << ": " << endl;
-        buscaAleatoriaPacientesCodCidade(b, a[i].codigoCidade, contCidade);
+        cout << "\tPaciente " << a[m].nome << ": " << endl;
+        buscaAleatoriaPacientesCodCidade(b, a[m].codigoCidade, contCidade);
         return 1;
     }
     else{
@@ -525,24 +551,25 @@ void incluirPaciente(struct pacientes a[], struct pacientes b[], struct paciente
 //------------------------------------EXERCICIO 4---------------------------------------
 
 
-void lerExcluirPacientes(int b[], int tamanhoPacientesExcluir, int &contPacientesExcluir){
+void lerExcluirPacientes(int b[], int tamanhoPacientesExcluir, int &contPacientesExcluir, struct pacientes a[], int &contPacientes1){
     int i=0;
+    contPacientesExcluir = 0;
     cout << "\nQuais pacientes deseja remover? (digite o cpf) " << endl;
     for(int saida=1; i<tamanhoPacientesExcluir && saida != 0; i++){
         cin >> b[i];
-        while (buscaAleatoriaPacientesCpf == 0){
-            cout << "O cpf nao existe ";
+        while (!buscaAleatoriaPacientesCpf(a, b[i], contPacientes1)){
+            cout << "\tO cpf nao existe, digite outro: ";
             cin >> b[i];
         }
         if(b[i]<=0){
             saida = 0;
         }
+        contPacientesExcluir++;
     }
-    contPacientesExcluir = i - 1;
 }
 
 void atualizacaoExcluirPacientes(struct pacientes a[], struct pacientes b[], int tamanho, int vetPacientesExcluir[], int &contPacientesExcluir, int &cont3){
-    for(int i=0, j=0, k=0; i<tamanho && j<contPacientesExcluir; i++){
+    for(int i=0, j=0, k=0; i<tamanho && j<=contPacientesExcluir; i++){
         if(a[i].cpf != vetPacientesExcluir[j]){
             b[k] = a[i];
             k = k+1;
@@ -557,7 +584,7 @@ void atualizacaoExcluirPacientes(struct pacientes a[], struct pacientes b[], int
 
 //------------------------------------EXERCICIO 5---------------------------------------
 
-// Função para agendamento de consultas
+// FunÃ§Ã£o para agendamento de consultas
 void agendarConsulta(struct consultas a[], struct cidades cidade[], struct pacientes paciente[], struct medicos medico[],
                                     struct cid cids[], struct medicamentos medicamento[], struct especialidade especialidades[],
                                     int tamanhoConsulta, int &contConsulta, int &contPaciente, int &contCidade, int &contEspecialidade,
@@ -570,7 +597,7 @@ void agendarConsulta(struct consultas a[], struct cidades cidade[], struct pacie
                 cout << "\n\tCpf: ";
                 cin >> a[i].cpf;
                 while(buscaAleatoriaConsultaCpf(paciente, a[i].cpf,  contPaciente, cidade, contCidade ) == 0){
-                    cout << "Paciente nao encontrado, digite novamente: ";
+                    cout << "\tPaciente nao encontrado, digite novamente: ";
                     cin >> a[i].cpf;
                 }
                 cout << "\tCodigo do Medico: ";
@@ -595,18 +622,15 @@ void agendarConsulta(struct consultas a[], struct cidades cidade[], struct pacie
                 cin >> a[i].quantMedicamento;
                 while(buscaAleatoriaConsultaQuantMedicamento(medicamento, a[i].codigoMedicamento, a[i].quantMedicamento, contMedicamento) == 0){
                     cout << "Quantidade de medicamento insuficiente, digite novamente: ";
-                    cin >> a[i].codigoMedicamento;
+                    cin >> a[i].quantMedicamento;
                     }
 
                 if(i < (tamanhoConsulta - 1)){
-                    cout << "deseja agendar mais uma consulta? (s/n) ";
+                    cout << "\n\tdeseja agendar mais uma consulta? (s/n) ";
                     cin >> continuar;
                 }
         }
 }
-
-//---------------------------------------------------------------------------------------------------------
-
 
 
 //------------------------------continuar no programa------------------------------------------
@@ -615,6 +639,8 @@ void continuarPrograma(char &continuar){
     cout << "\n\tDeseja continuar no programa?(s/n) ";
     cin >> continuar;
 }
+
+//--------------------------------------------------------------------------------------------------
 
 void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct especialidade vetEspecialidade[],
                   int tamanhoEspecialidade, int &contEspecialidade, struct cid vetCid[], int tamanhoCid, int &contCid,
@@ -632,24 +658,26 @@ void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct
     cout << "\n\n\tQual funcao deseja usar?" << endl;
 
     cout << "\n\t[01] Ler vetor Cidade" << endl;
-    cout << "\n\t[02] Ler vetor Especialidades" << endl;
-    cout << "\n\t[03] Ler vetor CID" << endl;
-    cout << "\n\t[04] Ler vetor Medicamentos" << endl;
+    cout << "\t[02] Ler vetor Especialidades" << endl;
+    cout << "\t[03] Ler vetor CID" << endl;
+    cout << "\t[04] Ler vetor Medicamentos" << endl;
 
-    cout << "\n\t[05] Imprimir vetor Cidade" << endl;
-    cout << "\n\t[06] Imprimir vetor Especialidades" << endl;
-    cout << "\n\t[07] Imprimir vetor CID" << endl;
-    cout << "\n\t[08] Imprimir vetor Medicamentos" << endl;
+    cout << "\t[05] Imprimir vetor Cidade" << endl;
+    cout << "\t[06] Imprimir vetor Especialidades" << endl;
+    cout << "\t[07] Imprimir vetor CID" << endl;
+    cout << "\t[08] Imprimir vetor Medicamentos" << endl;
 
-    cout << "\n\t[09] Inserir Medicos" << endl;
-    cout << "\n\t[10] Inserir Pacientes" << endl;
-    cout << "\n\t[11] Excluir Pacientes" << endl;
-    cout << "\n\t[12] Imprimir Pacientes" << endl;
+    cout << "\t[09] Inserir Medicos" << endl;
+    cout << "\t[10] Inserir Pacientes" << endl;
+    cout << "\t[11] Excluir Pacientes" << endl;
+    cout << "\t[12] Imprimir Pacientes" << endl;
 
-    cout << "\n\t[13] Agendar Consultas" << endl;
-    cout << "\n\t[14] Imprimir Consultas" << endl;
-    cout << "\n\t[15] Consultar Medicamento" << endl;
-    cout << "\n\t[16] Exibir Medicamentos com estoque escasso" << endl;
+    cout << "\t[13] Agendar Consultas" << endl;
+    cout << "\t[14] Imprimir Consultas" << endl;
+    cout << "\t[15] Consultar Medicamento" << endl;
+    cout << "\t[16] Exibir Medicamentos com estoque escasso" << endl;
+
+    cout << "\t[17] Soma das Consultas" << endl;
 
 
     cout << "\n\n\tEscolha: ";
@@ -699,7 +727,7 @@ void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct
             continuarPrograma(continuar);
             break;
         case 11:
-            lerExcluirPacientes(vetPacientesExcluir, tamanhoPacientes, contPacientesExcluir);
+            lerExcluirPacientes(vetPacientesExcluir, tamanhoPacientes, contPacientesExcluir, vetPacientes, contPacientes1);
             atualizacaoExcluirPacientes(vetPacientes, vetPacientesFinal, tamanhoPacientes, vetPacientesExcluir, contPacientes1, contPacientes3);
             continuarPrograma(continuar);
             break;
@@ -721,7 +749,7 @@ void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct
             int medconsultar;
             cout << "\n\tQual o codigo do medicamento que deseja buscar? ";
             cin >> medconsultar;
-            while(ConsultarMedicamento(vetMedicamentos, medconsultar, contMedicamentos) == 0){
+            while(consultarMedicamento(vetMedicamentos, medconsultar, contMedicamentos) == 0){
                 cout << "\n\tMedicamento nao encontrado, digite outro codigo " << endl;
                 cin >> medconsultar;
             };
@@ -731,9 +759,13 @@ void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct
             exibirMedicamento(vetMedicamentos, tamanhoMedicamentos, contMedicamentos);
             continuarPrograma(continuar);
             break;
+        case 17:
+            SomaConsultas(vetConsulta, contConsulta, vetMedicamentos, contMedicamentos);
+            continuarPrograma(continuar);
+            break;
 
         default:
-            cout << "escolha não esta nos parametros" << endl;
+            cout << "escolha nÃ£o esta nos parametros" << endl;
 
     }
 
@@ -831,21 +863,22 @@ int main()
 
     struct medicos vetMedico2[tamanhoMedico];
     struct medicos vetMedicoFinal[tamanhoMedico];
+
     struct pacientes vetPacientes[tamanhoPacientes];
     vetPacientes[0].cpf = 2;
     vetPacientes[0].nome = "vinicius";
     vetPacientes[0].endereco = "Londrina";
     vetPacientes[0].codigoCidade =5;
 
-    vetPacientes[0].cpf = 6;
-    vetPacientes[0].nome = "manuela";
-    vetPacientes[0].endereco = "Sao Carlos";
-    vetPacientes[0].codigoCidade =2;
+    vetPacientes[1].cpf = 6;
+    vetPacientes[1].nome = "manuela";
+    vetPacientes[1].endereco = "Sao Carlos";
+    vetPacientes[1].codigoCidade = 2;
 
-    vetPacientes[0].cpf = 2;
-    vetPacientes[0].nome = "diego";
-    vetPacientes[0].endereco = "Londrina";
-    vetPacientes[0].codigoCidade =5;
+    vetPacientes[2].cpf = 2;
+    vetPacientes[2].nome = "diego";
+    vetPacientes[2].endereco = "Londrina";
+    vetPacientes[2].codigoCidade =5;
 
     struct pacientes vetPacientes2[tamanhoPacientes];
     struct pacientes vetPacientesFinal[tamanhoPacientes];
