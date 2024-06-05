@@ -114,10 +114,10 @@ void lerMedicamentos(struct medicamentos a[], int tamanho, int &cont){
 void imprimirPaciente(struct pacientes vetPaciente[], int &contPaciente1){
     for(int i = 0; i < contPaciente1; i++){
         cout << "\n\tPaciente " << i << endl;
-        cout << "CPF: " << vetPaciente[i].cpf << endl;
-        cout << "Nome: " << vetPaciente[i].nome << endl;
-        cout << "Endereco: " << vetPaciente[i].endereco << endl;
-        cout << "Codigo Cidade: " << vetPaciente[i].codigoCidade << endl;
+        cout << "\tCPF: " << vetPaciente[i].cpf << endl;
+        cout << "\tNome: " << vetPaciente[i].nome << endl;
+        cout << "\tEndereco: " << vetPaciente[i].endereco << endl;
+        cout << "\tCodigo Cidade: " << vetPaciente[i].codigoCidade << endl;
     }
 }
 
@@ -132,33 +132,85 @@ void imprimirCidade(struct cidades vetCidade[], int &contCidade){
 
 void imprimirEspecialidade(struct especialidade vetEspecialidade[], int &contEspecialidade){
     for(int i = 0; i < contEspecialidade; i++){
-        cout << "\n\tCidade " << i << endl;
-        cout << "\n\tCodigo: " << vetEspecialidade[i].codigo << endl;
-        cout << "\n\tDescricao: " << vetEspecialidade[i].descricao << endl;
+        cout << "\tEspecialidade " << i << endl;
+        cout << "\tCodigo: " << vetEspecialidade[i].codigo << endl;
+        cout << "\tDescricao: " << vetEspecialidade[i].descricao << endl;
     }
 }
 
 void imprimirCid(struct cid vetCid[], int &contCid){
     for(int i = 0; i < contCid; i++){
-        cout << "\n\tCidade " << i << endl;
-        cout << "\n\tCodigo: " << vetCid[i].codigo << endl;
-        cout << "\n\tDescricao: " << vetCid[i].descricao << endl;
+        cout << "\tCidu " << i << endl;
+        cout << "\tCodigo: " << vetCid[i].codigo << endl;
+        cout << "\tDescricao: " << vetCid[i].descricao << endl;
     }
 }
 
 void imprimirMedicamentos(struct medicamentos vetMedicamentos[], int &contMedicamentos){
     for(int i = 0; i < contMedicamentos; i++){
-        cout << "\n\tCidade " << i << endl;
-        cout << "\n\tCodigo: " << vetMedicamentos[i].codigo << endl;
-        cout << "\n\tDescricao: " << vetMedicamentos[i].descricao << endl;
-        cout << "\n\tQuantidade em estoque: " << vetMedicamentos[i].quantEstoque << endl;
-        cout << "\n\tEstoque Minimo: " << vetMedicamentos[i].estoqueMinimo << endl;
-        cout << "\n\tEstoque Maximo: " << vetMedicamentos[i].estoqueMaximo << endl;
-        cout << "\n\tPreco unitario: " << vetMedicamentos[i].precoUnitario << endl;
+        cout << "\n\tMedicamento " << i << endl;
+        cout << "\tCodigo: " << vetMedicamentos[i].codigo << endl;
+        cout << "\tDescricao: " << vetMedicamentos[i].descricao << endl;
+        cout << "\tQuantidade em estoque: " << vetMedicamentos[i].quantEstoque << endl;
+        cout << "\tEstoque Minimo: " << vetMedicamentos[i].estoqueMinimo << endl;
+        cout << "\tEstoque Maximo: " << vetMedicamentos[i].estoqueMaximo << endl;
+        cout << "\tPreco unitario: " << vetMedicamentos[i].precoUnitario << endl;
+    }
+}
+
+void imprimirConsultas(struct consultas vetConsultas[], int &contConsultas){
+    for(int i = 0; i < contConsultas; i++){
+        cout << "\n\tMedicamento " << i << endl;
+        cout << "\tCpf: " << vetConsultas[i].cpf << endl;
+        cout << "\tCodigo Medico: " << vetConsultas[i].codigoMedico << endl;
+        cout << "\tCodigo CID: " << vetConsultas[i].codigoCid << endl;
+        cout << "\tCodigo Medicamento: " << vetConsultas[i].codigoMedicamento << endl;
+        cout << "\tQuantidade de Medicamento: " << vetConsultas[i].quantMedicamento << endl;
     }
 }
 
 //------------------------FUNÇÕES DE BUSCA--------------------
+
+
+void exibirMedicamento(struct medicamentos medicamento[], int tamanhoMedicamento, int &contMedicamento){
+        cout << "\n\tExibir medicamentos com estoque escasso" << endl;
+        for(int i = 0; i < contMedicamento; i++){
+            if(medicamento[i].quantEstoque < medicamento[i].estoqueMinimo){
+                cout << "\n\tMedicamento " << i << endl;
+                cout << "\tCodigo: " << medicamento[i].codigo << endl;
+                cout << "\tDescricao: " << medicamento[i].descricao << endl;
+                cout << "\tQuantidade em estoque: " << medicamento[i].quantEstoque << endl;
+                cout << "\tEstoque Minimo: " << medicamento[i].estoqueMinimo << endl;
+                cout << "\tEstoque Maximo: " << medicamento[i].estoqueMaximo << endl;
+                cout << "\tPreco unitario: " << medicamento[i].precoUnitario << endl;
+                cout << "\tQuantidade a ser comprada: " << medicamento[i].estoqueMaximo - medicamento[i].quantEstoque;
+                cout << "\n\tValor total: " << medicamento[i].precoUnitario * (medicamento[i].estoqueMaximo - medicamento[i].quantEstoque);
+            }
+        }
+}
+
+bool ConsultarMedicamento(struct medicamentos medicamento[], int cod, int &contMedicamento){
+        int i = 0, f = contMedicamento;
+        int m = (i + f) / 2;
+        for (; f >= i && cod != medicamento[m].codigo; m = (i + f) / 2){
+            if (cod > medicamento[m].codigo)
+                i = m + 1;
+            else
+                f = m - 1;
+        }
+        if (cod == medicamento[m].codigo){
+            cout << "\n\tMedicamento " << cod << ": " << medicamento[m].descricao << endl;
+            cout << "\tQuantidade em Estoque: " << medicamento[m].quantEstoque << endl;
+            cout << "\tEstoque Minimo: " << medicamento[m].estoqueMinimo << endl;
+            cout << "\tEstoque Maximo: " << medicamento[m].estoqueMaximo << endl;
+            cout << "\tPreco Unitario: " << medicamento[m].precoUnitario << endl;
+            cout << "\tValor Total no estoque: " << medicamento[m].quantEstoque * medicamento[m].precoUnitario << endl;
+            return 1;
+        }
+        else{
+            return 0;
+        }
+}
 
 
 bool buscaAleatoriaConsultaQuantMedicamento(struct medicamentos medicamento[], int cod, int quantidade, int &contMedicamento){
@@ -513,7 +565,7 @@ void agendarConsulta(struct consultas a[], struct cidades cidade[], struct pacie
 
         char continuar = 's';
 
-        for(int i=0; i < tamanhoConsulta && continuar == 's' ; i++){
+        for(int i=0; i < tamanhoConsulta && continuar == 's' ; i++, contConsulta++){
                 cout << "\n\tAgendamento Consulta " << i << endl;
                 cout << "\n\tCpf: ";
                 cin >> a[i].cpf;
@@ -555,16 +607,27 @@ void agendarConsulta(struct consultas a[], struct cidades cidade[], struct pacie
 
 //---------------------------------------------------------------------------------------------------------
 
+
+
+//------------------------------continuar no programa------------------------------------------
+
+void continuarPrograma(char &continuar){
+    cout << "\n\tDeseja continuar no programa?(s/n) ";
+    cin >> continuar;
+}
+
 void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct especialidade vetEspecialidade[],
                   int tamanhoEspecialidade, int &contEspecialidade, struct cid vetCid[], int tamanhoCid, int &contCid,
                   struct medicamentos vetMedicamentos[], int tamanhoMedicamentos, int &contMedicamentos, struct medicos vetMedico[],
                   struct medicos vetMedico2[], struct medicos vetMedicoFinal[], int tamanhoMedico, int &contMedico1, int &contMedico2,
                   int &contMedico3, struct pacientes vetPacientes[], struct pacientes vetPacientes2[], struct pacientes vetPacientesFinal[],
                   int tamanhoPacientes, int &contPacientes1, int &contPacientes2, int &contPacientes3, int vetPacientesExcluir[], int contPacientesExcluir,
-                  struct consultas consulta[], int tamanhoConsulta, int &contConsulta){
+                  struct consultas vetConsulta[], int tamanhoConsulta, int &contConsulta){
 
 
+    char continuar = 's';
     int escolheFunc;
+    while(continuar == 's'){
     cout << "\n\n\tMENU ARQUIVOS SEQUENCIAIS" << endl;
     cout << "\n\n\tQual funcao deseja usar?" << endl;
 
@@ -584,6 +647,9 @@ void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct
     cout << "\n\t[12] Imprimir Pacientes" << endl;
 
     cout << "\n\t[13] Agendar Consultas" << endl;
+    cout << "\n\t[14] Imprimir Consultas" << endl;
+    cout << "\n\t[15] Consultar Medicamento" << endl;
+    cout << "\n\t[16] Exibir Medicamentos com estoque escasso" << endl;
 
 
     cout << "\n\n\tEscolha: ";
@@ -592,47 +658,78 @@ void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct
     switch(escolheFunc){
         case 1:
             lerCidade(vetCidade, tamanhoCidade, contCidade);
+            continuarPrograma(continuar);
             break;
         case 2:
             lerEspecialidade(vetEspecialidade, tamanhoEspecialidade, contEspecialidade);
+            continuarPrograma(continuar);
             break;
         case 3:
             lerCid(vetCid, tamanhoCid, contCid);
+            continuarPrograma(continuar);
             break;
         case 4:
             lerMedicamentos(vetMedicamentos, tamanhoMedicamentos, contMedicamentos);
+            continuarPrograma(continuar);
             break;
         case 5:
             imprimirCidade(vetCidade, contCidade);
+            continuarPrograma(continuar);
             break;
         case 6:
             imprimirEspecialidade(vetEspecialidade, contEspecialidade);
+            continuarPrograma(continuar);
             break;
         case 7:
             imprimirCid(vetCid, contCid);
+            continuarPrograma(continuar);
             break;
         case 8:
             imprimirMedicamentos(vetMedicamentos, contMedicamentos);
+            continuarPrograma(continuar);
             break;
         case 9:
             incluirMedico(vetMedico, vetMedico2, vetMedicoFinal, vetEspecialidade, vetCidade,
                            tamanhoMedico, contMedico1, contMedico2, contMedico3, contEspecialidade, contCidade);
+            continuarPrograma(continuar);
             break;
         case 10:
             incluirPaciente(vetPacientes, vetPacientes2, vetPacientesFinal, vetCidade, tamanhoPacientes,
                             contPacientes1, contPacientes2, contPacientes3, contCidade);
+            continuarPrograma(continuar);
             break;
         case 11:
             lerExcluirPacientes(vetPacientesExcluir, tamanhoPacientes, contPacientesExcluir);
             atualizacaoExcluirPacientes(vetPacientes, vetPacientesFinal, tamanhoPacientes, vetPacientesExcluir, contPacientes1, contPacientes3);
+            continuarPrograma(continuar);
             break;
         case 12:
             imprimirPaciente(vetPacientes, contPacientes1);
+            continuarPrograma(continuar);
             break;
         case 13:
-            agendarConsulta(vetConsulta, vetCidade, vetPaciente, vetMedico, vetCid, vetMedicamento, vetEspecialidade,
+            agendarConsulta(vetConsulta, vetCidade, vetPacientes, vetMedico, vetCid, vetMedicamentos, vetEspecialidade,
                             tamanhoConsulta, contConsulta, contPacientes1,contCidade, contEspecialidade, contMedico1,
-                             contCid, contMedicamento);
+                             contCid, contMedicamentos);
+            continuarPrograma(continuar);
+            break;
+        case 14:
+            imprimirConsultas(vetConsulta, contConsulta);
+            continuarPrograma(continuar);
+            break;
+        case 15:
+            int medconsultar;
+            cout << "\n\tQual o codigo do medicamento que deseja buscar? ";
+            cin >> medconsultar;
+            while(ConsultarMedicamento(vetMedicamentos, medconsultar, contMedicamentos) == 0){
+                cout << "\n\tMedicamento nao encontrado, digite outro codigo " << endl;
+                cin >> medconsultar;
+            };
+            continuarPrograma(continuar);
+            break;
+        case 16:
+            exibirMedicamento(vetMedicamentos, tamanhoMedicamentos, contMedicamentos);
+            continuarPrograma(continuar);
             break;
 
         default:
@@ -641,6 +738,7 @@ void menu(struct cidades vetCidade[], int tamanhoCidade, int &contCidade, struct
     }
 
 }
+                  }
 
 
 int main()
@@ -649,8 +747,8 @@ int main()
     const int tamanhoCidade = 10, tamanhoEspecialidade = 10, tamanhoCid = 10,
     tamanhoMedicamentos = 10, tamanhoMedico = 10, tamanhoPacientes = 10, tamanhoConsulta = 10;
 
-    int contCidade = 0, contEspecialidade = 0, contCid = 0, contMedicamentos = 0,
-     contMedico1 = 0, contMedico2 = 0, contMedico3 = 0, contPacientes1 = 0, contPacientes2 = 0,
+    int contCidade = 3, contEspecialidade = 3, contCid = 3, contMedicamentos = 3,
+     contMedico1 = 3, contMedico2 = 0, contMedico3 = 0, contPacientes1 = 3, contPacientes2 = 0,
       contPacientes3 = 0, contPacientesExcluir = 0, contConsulta = 0;
 
 
@@ -688,12 +786,69 @@ int main()
     vetCid[2].descricao = "COVID";
 
     struct medicamentos vetMedicamentos[tamanhoMedicamentos];
+    vetMedicamentos[0].codigo = 1;
+    vetMedicamentos[0].descricao = "dipirona";
+    vetMedicamentos[0].quantEstoque = 20;
+    vetMedicamentos[0].estoqueMinimo = 10;
+    vetMedicamentos[0].estoqueMaximo = 40;
+    vetMedicamentos[0].precoUnitario = 15.5;
+
+    vetMedicamentos[1].codigo = 3;
+    vetMedicamentos[1].descricao = "loratadina";
+    vetMedicamentos[1].quantEstoque = 15;
+    vetMedicamentos[1].estoqueMinimo = 10;
+    vetMedicamentos[1].estoqueMaximo = 30;
+    vetMedicamentos[1].precoUnitario = 10;
+
+    vetMedicamentos[2].codigo = 4;
+    vetMedicamentos[2].descricao = "cimegripe";
+    vetMedicamentos[2].quantEstoque = 10;
+    vetMedicamentos[2].estoqueMinimo = 15;
+    vetMedicamentos[2].estoqueMaximo = 40;
+    vetMedicamentos[2].precoUnitario = 23.5;
+
     struct medicos vetMedico[tamanhoMedico];
+    vetMedico[0].codigo = 1;
+    vetMedico[0].nome = "jorge";
+    vetMedico[0].codigoEspecialidade = 2;
+    vetMedico[0].endereco = "Sao Paulo";
+    vetMedico[0].telefone = "18 93232-3232";
+    vetMedico[0].codigoCidade = 2;
+
+    vetMedico[1].codigo = 3;
+    vetMedico[1].nome = "Sao Carlos";
+    vetMedico[1].codigoEspecialidade = 2;
+    vetMedico[1].endereco = "taruma";
+    vetMedico[1].telefone = "18 94242-4242";
+    vetMedico[1].codigoCidade = 3;
+
+    vetMedico[2].codigo = 5;
+    vetMedico[2].nome = "vinicius";
+    vetMedico[2].codigoEspecialidade = 3;
+    vetMedico[2].endereco = "Londrina";
+    vetMedico[2].telefone = "18 95252-5252";
+    vetMedico[2].codigoCidade = 5;
+
     struct medicos vetMedico2[tamanhoMedico];
-    struct medicos vetMedicoFinal[2 * tamanhoMedico];
+    struct medicos vetMedicoFinal[tamanhoMedico];
     struct pacientes vetPacientes[tamanhoPacientes];
+    vetPacientes[0].cpf = 2;
+    vetPacientes[0].nome = "vinicius";
+    vetPacientes[0].endereco = "Londrina";
+    vetPacientes[0].codigoCidade =5;
+
+    vetPacientes[0].cpf = 6;
+    vetPacientes[0].nome = "manuela";
+    vetPacientes[0].endereco = "Sao Carlos";
+    vetPacientes[0].codigoCidade =2;
+
+    vetPacientes[0].cpf = 2;
+    vetPacientes[0].nome = "diego";
+    vetPacientes[0].endereco = "Londrina";
+    vetPacientes[0].codigoCidade =5;
+
     struct pacientes vetPacientes2[tamanhoPacientes];
-    struct pacientes vetPacientesFinal[2 * tamanhoPacientes];
+    struct pacientes vetPacientesFinal[tamanhoPacientes];
     int vetPacientesExcluir[tamanhoPacientes];
     struct consultas vetConsulta[tamanhoConsulta];
 
